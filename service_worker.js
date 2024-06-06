@@ -1,5 +1,5 @@
-var cacheName = 'yew-pwa';
-var filesToCache = [
+const cacheName = 'yew-pwa';
+const filesToCache = [
     './',
     './index.html',
     './pkg/bundle.js',
