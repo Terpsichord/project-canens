@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    
+    
+    
+    <link rel="manifest" href="./manifest.json">
+
+    <title>Trunk Template</title>
+    <link rel="stylesheet" href="/project-canens/index-78b00c8bb3d588cf.css" integrity="sha384&#x2D;7TU3KEgbdt7v&#x2B;uV1osMm76b5ZbC8IHNJ1l&#x2F;NjV9&#x2F;LTI6wrHNEDgVGz2S6ZlxRNsw"/>
+  
+<link rel="modulepreload" href="/project-canens/project-canens-158be6e427bf8b1f.js" crossorigin=anonymous integrity="sha384-mTgdwlwnD/52V6a/xByVY6dC0LB6q6SjD1+ntmDOg6Zvfbfuno/cmoQa07NeIEjR">
+<link rel="preload" href="/project-canens/project-canens-158be6e427bf8b1f_bg.wasm" crossorigin=anonymous integrity="sha384-65Fe0LunXuZcJIxtoERMQi93IONi4qj7/LaFfrHeX0SvMxMNlw3RZ0QwTn78BHad" as="fetch" type="application/wasm"></head>
+
+  <script>
+    // register ServiceWorker
+    window.onload = () => {
+      'use strict';
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+                .register('./service_worker.js');
+      }
+    }
+  </script>
+
+  <body/>
+
+<script type="module" nonce="afQA30WYpo/UatMHTyNqew==">
+import init, * as bindings from '/project-canens/project-canens-158be6e427bf8b1f.js';
+const wasm = await init('/project-canens/project-canens-158be6e427bf8b1f_bg.wasm');
+
+
+window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
+
+</script></html>
