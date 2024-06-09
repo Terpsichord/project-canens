@@ -5,6 +5,9 @@
 
 This is a WIP app designed for musicians to be able to easily practice songs (+ plus some other features)
 
+The end goal is for users to be able to search for songs, and quickly be able to have the tools and information they
+need to be able to practice the song and understand the music theory behind it
+
 ### Todo
 
 - [ ] PWA
