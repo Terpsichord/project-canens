@@ -1,35 +1,18 @@
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-
-body {
-  align-items: center;
+.song-card {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  max-width: 400px; // Optional: adjust according to your layout
 
-  background: linear-gradient(to bottom right, #444444, #009a5b);
-  font-size: 1.5rem;
-}
+  &-image {
+    width: 100px; // Adjust width of the image
+    height: auto;
+    margin-right: 20px; // Adjust spacing between image and content
+  }
 
-main {
-  color: #fff6d5;
-  font-family: sans-serif;
-  text-align: center;
-}
-
-.logo {
-  height: 20em;
-}
-
-.heart:after {
-  content: "❤️";
-
-  font-size: 1.75em;
-}
-
-h1 + .subtitle {
-  display: block;
-  margin-top: -1em;
+  &-content {
+    flex-grow: 1;
+  }
 }
