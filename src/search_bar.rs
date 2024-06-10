@@ -15,7 +15,11 @@ pub fn SearchBar(props: &SearchBarProps) -> Html {
     let on_submit = {
         let input_value = input_value.clone();
         let on_search = props.on_search.clone();
-        Callback::from(move |_| on_search.emit(input_value.deref().clone()))
+        Callback::from(move |event: SubmitEvent| {
+            // Stops the page from reloading on submit
+            event.prevent_default();
+            on_search.emit(input_value.deref().clone())
+        })
     };
 
     let on_input_change = {

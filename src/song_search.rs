@@ -1,7 +1,7 @@
 use crate::search_bar::SearchBar;
 use crate::search_results::SearchResults;
+use crate::song_card::{SongCard, SongCardProps};
 use crate::spotify::SpotifyClient;
-use gloo_console::log;
 use itertools::Itertools;
 use rspotify::model::{FullTrack, SearchResult, SearchType};
 use rspotify::prelude::*;
@@ -9,30 +9,11 @@ use rspotify::ClientCredsSpotify;
 use web_sys::wasm_bindgen::UnwrapThrowExt;
 use yew::prelude::*;
 
-#[derive(PartialEq, Clone, Debug)]
-pub struct SongItem {
-    pub title: String,
-    pub artist: String,
-    pub cover_url: String,
-}
-
-impl From<&SongItem> for Html {
-    fn from(value: &SongItem) -> Self {
-        html! {
-            <div>
-                <h4>{ &value.title }</h4>
-                <p>{ &value.artist }</p>
-                <img src={ value.cover_url.clone() } />
-            </div>
-        }
-    }
-}
-
 async fn get_song_items(
     query: String,
     spotify: &ClientCredsSpotify,
     search_length: u32,
-) -> Vec<SongItem> {
+) -> Vec<SongCardProps> {
     let search_result = spotify
         .search(
             query.as_str(),
@@ -55,7 +36,7 @@ async fn get_song_items(
 
     full_tracks
         .into_iter()
-        .map(|item: FullTrack| SongItem {
+        .map(|item: FullTrack| SongCardProps {
             title: item.name,
             artist: item
                 .artists
@@ -95,7 +76,7 @@ pub fn SongSearch(props: &SongSearchProps) -> Html {
             let spotify = spotify.clone();
             wasm_bindgen_futures::spawn_local(async move {
                 let songs = get_song_items(query, &spotify, search_length).await;
-                log!(format!("{:?}", songs));
+
                 results.set(songs);
             });
         })
@@ -104,7 +85,7 @@ pub fn SongSearch(props: &SongSearchProps) -> Html {
     html! {
         <div>
             <SearchBar on_search={update_results}/>
-            <SearchResults<SongItem> search_items={(*results).clone()}/>
+            <SearchResults<SongCard> search_items={(*results).clone()}/>
         </div>
     }
 }
