@@ -8,6 +8,7 @@ use rspotify::prelude::*;
 use rspotify::ClientCredsSpotify;
 use web_sys::wasm_bindgen::UnwrapThrowExt;
 use yew::prelude::*;
+use yew_hooks::prelude::*;
 
 async fn get_song_items(
     query: String,
@@ -82,10 +83,28 @@ pub fn SongSearch(props: &SongSearchProps) -> Html {
         })
     };
 
+    let focused = use_state(|| false);
+
+    let on_focus = {
+        let focused = focused.clone();
+        Callback::from(move |_| focused.set(true))
+    };
+
+    let node = use_node_ref();
+
+    use_click_away(node.clone(), {
+        let focused = focused.clone();
+        move |_| {
+            focused.set(false);
+        }
+    });
+
     html! {
-        <div>
-            <SearchBar on_search={update_results}/>
-            <SearchResults<SongCard> search_items={(*results).clone()}/>
+        <div ref={node} class="search-container">
+            <SearchBar on_search={update_results} {on_focus} />
+            if *focused {
+                <SearchResults<SongCard> search_items={(*results).clone()}/>
+            }
         </div>
     }
 }
