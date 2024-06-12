@@ -2,8 +2,8 @@ use rspotify::Credentials;
 use std::env;
 use std::fs::File;
 use std::io::BufWriter;
-use std::path::Path;
 use std::io::Write;
+use std::path::Path;
 
 pub fn main() {
     if Ok("debug".to_string()) == env::var("PROFILE") {
@@ -18,6 +18,7 @@ pub fn main() {
             "rspotify::Credentials::new(\"{}\", \"{}\")",
             credentials.id,
             credentials.secret.expect("Expected RSPOTIFY_CLIENT_SECRET")
-        ).unwrap();
+        )
+        .unwrap();
     }
 }

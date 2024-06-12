@@ -18,6 +18,7 @@ implicit-clone = "0.4.9"
 wasm-logger = "0.2.0"
 log = "0.4.21"
 yew-hooks = "0.3.2"
+yew-router = "0.18.0"
 
 [build-dependencies]
 rspotify = { version = "0.13.2", features = ["env-file"]}

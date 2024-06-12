@@ -1,5 +1,6 @@
 use crate::search_bar::SearchBar;
 use crate::search_results::SearchResults;
+use crate::song::Song;
 use crate::song_card::{SongCard, SongCardProps};
 use crate::spotify::SpotifyClient;
 use itertools::Itertools;
@@ -7,6 +8,7 @@ use rspotify::model::{FullTrack, SearchResult, SearchType};
 use rspotify::prelude::*;
 use rspotify::ClientCredsSpotify;
 use web_sys::wasm_bindgen::UnwrapThrowExt;
+use yew::platform::spawn_local;
 use yew::prelude::*;
 use yew_hooks::prelude::*;
 
@@ -38,32 +40,39 @@ async fn get_song_items(
     full_tracks
         .into_iter()
         .map(|item: FullTrack| SongCardProps {
-            title: item.name,
-            artist: item
-                .artists
-                .into_iter()
-                .map(|artist| artist.name)
-                .join(", "),
-            cover_url: item
-                .album
-                .images
-                .into_iter()
-                .next()
-                .expect_throw(&format!("{:?} has no cover art", item.href))
-                .url,
+            song: Song {
+                title: item.name,
+                artist: item
+                    .artists
+                    .into_iter()
+                    .map(|artist| artist.name)
+                    .join(", "),
+                cover_url: item
+                    .album
+                    .images
+                    .into_iter()
+                    .next()
+                    .expect_throw(&format!("{:?} has no cover art", item.href))
+                    .url,
+                id: item
+                    .id
+                    .unwrap_or_else(|| panic!("{:?} has no id", item.href))
+                    .to_string(),
+            },
         })
         .collect()
 }
 
 #[derive(PartialEq, Properties)]
 pub struct SongSearchProps {
-    pub spotify_client: SpotifyClient,
     pub search_length: u32,
 }
 
 #[function_component]
 pub fn SongSearch(props: &SongSearchProps) -> Html {
-    let spotify = &props.spotify_client.client_creds;
+    let spotify = use_context::<SpotifyClient>()
+        .expect("No spotify client provided")
+        .client_creds;
 
     #[allow(clippy::redundant_closure)]
     let results = use_state(|| vec![]);
@@ -75,7 +84,7 @@ pub fn SongSearch(props: &SongSearchProps) -> Html {
         Callback::from(move |query: String| {
             let results = results.clone();
             let spotify = spotify.clone();
-            wasm_bindgen_futures::spawn_local(async move {
+            spawn_local(async move {
                 let songs = get_song_items(query, &spotify, search_length).await;
 
                 results.set(songs);

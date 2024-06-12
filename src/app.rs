@@ -1,20 +1,38 @@
-use crate::song_search::SongSearch;
+use crate::home::Home;
+use crate::song_info::SongInfo;
 use crate::spotify;
+use crate::spotify::SpotifyClient;
 use yew::prelude::*;
+use yew_router::{BrowserRouter, Routable, Switch};
 
-// #[derive(Properties)]
-// pub struct AppProps {}
+#[derive(Routable, Clone, PartialEq)]
+pub enum Route {
+    #[at("/")]
+    Home,
+    #[at("/song/:id")]
+    Song { id: String },
+}
+
+fn switch(route: Route) -> Html {
+    let search_length = 5;
+    log::debug!("Switching");
+    match route {
+        Route::Home => html! { <Home {search_length} /> },
+        Route::Song { id } => html! { <SongInfo {id} /> },
+    }
+}
 
 #[function_component(App)]
 pub fn app() -> Html {
-    let search_length = 5;
-
     let spotify_client = spotify::authorize_spotify();
 
     html! {
         <main>
-            <h1>{ "Hello World!" }</h1>
-            <SongSearch {spotify_client} {search_length} />
+            <BrowserRouter>
+                <ContextProvider<SpotifyClient> context={spotify_client}>
+                    <Switch<Route> render={switch} />
+                </ContextProvider<SpotifyClient>>
+            </BrowserRouter>
         </main>
     }
 }

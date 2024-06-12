@@ -10,7 +10,6 @@ pub struct SearchBarProps {
 
 #[function_component]
 pub fn SearchBar(props: &SearchBarProps) -> Html {
-
     let onfocus = {
         let on_focus = props.on_focus.clone();
         Callback::from(move |_| {

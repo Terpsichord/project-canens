@@ -14,7 +14,6 @@ impl PartialEq for SpotifyClient {
     }
 }
 
-
 #[cfg(debug_assertions)]
 fn credentials() -> Credentials {
     include!(concat!(env!("OUT_DIR"), "/env.rs"))
@@ -25,7 +24,7 @@ fn credentials() -> Credentials {
     panic!("Can't currently get Spotify credentials in release mode");
 }
 
-pub  fn authorize_spotify() -> SpotifyClient {
+pub fn authorize_spotify() -> SpotifyClient {
     let client_creds = ClientCredsSpotify::new(credentials());
 
     wasm_bindgen_futures::spawn_local({
@@ -37,7 +36,6 @@ pub  fn authorize_spotify() -> SpotifyClient {
                 .expect("Couldn't get Spotify access token");
         }
     });
-
 
     SpotifyClient {
         client_creds: Rc::new(client_creds),
