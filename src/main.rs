@@ -1,5 +1,7 @@
 mod app;
 
+mod error;
+mod fretmap;
 mod home;
 mod search_bar;
 mod search_results;

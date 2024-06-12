@@ -26,7 +26,6 @@ pub fn SearchBar(props: &SearchBarProps) -> Html {
                 .dyn_into::<HtmlInputElement>()
                 .unwrap_throw()
                 .value();
-            log::debug!("{}", value);
             on_search.emit(value);
         })
     };

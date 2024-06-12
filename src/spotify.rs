@@ -1,8 +1,14 @@
-use implicit_clone::ImplicitClone;
-use rspotify::{ClientCredsSpotify, Credentials};
 use std::rc::Rc;
 
-#[derive(Clone, ImplicitClone)]
+use anyhow::anyhow;
+use implicit_clone::ImplicitClone;
+use rspotify::clients::BaseClient;
+use rspotify::model::TrackId;
+use rspotify::{ClientCredsSpotify, Credentials};
+
+use crate::song::Song;
+
+#[derive(Clone, ImplicitClone, Default)]
 pub struct SpotifyClient {
     pub client_creds: Rc<ClientCredsSpotify>,
 }
@@ -24,20 +30,40 @@ fn credentials() -> Credentials {
     panic!("Can't currently get Spotify credentials in release mode");
 }
 
-pub fn authorize_spotify() -> SpotifyClient {
+pub async fn authorize_spotify() -> anyhow::Result<SpotifyClient> {
     let client_creds = ClientCredsSpotify::new(credentials());
 
-    wasm_bindgen_futures::spawn_local({
-        let client_creds = client_creds.clone();
-        async move {
-            client_creds
-                .request_token()
-                .await
-                .expect("Couldn't get Spotify access token");
-        }
-    });
+    client_creds
+        .request_token()
+        .await
+        .map_err(|e| anyhow::anyhow!("Couldn't get Spotify access token: {:?}", e))?;
 
-    SpotifyClient {
+    Ok(SpotifyClient {
         client_creds: Rc::new(client_creds),
+    })
+}
+
+impl SpotifyClient {
+    pub async fn get_song_from_id(&self, id: &str) -> anyhow::Result<Song> {
+        // TODO: add caching of song data
+        let track_id = TrackId::from_id(id)?;
+        let full_track = self
+            .client_creds
+            .track(track_id.clone(), None)
+            .await
+            .map_err(|e| anyhow!("Failed to get track: {}", e))?;
+        // TODO: Work out why audio_features gets ratelimited immediately
+        // let audio_features = self
+        //     .client_creds
+        //     .track_features(track_id)
+        //     .await
+        //     .map_err(|e| anyhow!("Failed to get audio features for track: {}", e))?;
+
+        let song = Song::builder()
+            .full_track(full_track)
+            // .audio_features(audio_features)
+            .build()?;
+
+        Ok(song)
     }
 }

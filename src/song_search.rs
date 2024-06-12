@@ -1,16 +1,17 @@
-use crate::search_bar::SearchBar;
-use crate::search_results::SearchResults;
-use crate::song::Song;
-use crate::song_card::{SongCard, SongCardProps};
-use crate::spotify::SpotifyClient;
 use itertools::Itertools;
-use rspotify::model::{FullTrack, SearchResult, SearchType};
+use rspotify::model::{SearchResult, SearchType};
 use rspotify::prelude::*;
 use rspotify::ClientCredsSpotify;
 use web_sys::wasm_bindgen::UnwrapThrowExt;
 use yew::platform::spawn_local;
 use yew::prelude::*;
 use yew_hooks::prelude::*;
+
+use crate::search_bar::SearchBar;
+use crate::search_results::SearchResults;
+use crate::song::SongPreview;
+use crate::song_card::{SongCard, SongCardProps};
+use crate::spotify::SpotifyClient;
 
 async fn get_song_items(
     query: String,
@@ -39,27 +40,8 @@ async fn get_song_items(
 
     full_tracks
         .into_iter()
-        .map(|item: FullTrack| SongCardProps {
-            song: Song {
-                title: item.name,
-                artist: item
-                    .artists
-                    .into_iter()
-                    .map(|artist| artist.name)
-                    .join(", "),
-                cover_url: item
-                    .album
-                    .images
-                    .into_iter()
-                    .next()
-                    .expect_throw(&format!("{:?} has no cover art", item.href))
-                    .url,
-                id: item
-                    .id
-                    .unwrap_or_else(|| panic!("{:?} has no id", item.href))
-                    .to_string(),
-            },
-        })
+        .filter_map(|track| track.try_into().ok())
+        .map(|song: SongPreview| SongCardProps { song_preview: song })
         .collect()
 }
 

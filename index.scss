@@ -1,22 +1,58 @@
+$fretmap-bg: rgb(248, 225, 170);
+$fretmap-accent: rgb(204, 75, 0);
+
 .song-card {
   display: flex;
   align-items: center;
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 10px;
-  max-width: 400px; // Optional: adjust according to your layout
+  width: 400px;
 
   &-image {
-    width: 100px; // Adjust width of the image
+    width: 100px;
     height: auto;
-    margin-right: 20px; // Adjust spacing between image and content
+    margin-right: 20px;
+    border-radius: 8px;
   }
 
   &-content {
     flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
 .search-container {
   width: max-content;
+}
+
+.fretmap {
+  display: inline-block;
+  text-decoration: none;
+  color: $fretmap-accent;
+  background-color: $fretmap-bg;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 2px solid $fretmap-accent;
+  text-align: center;
+  font-weight: bold;
+  transition: background-color 0.3s, border-color 0.3s;
+
+  &:hover {
+    background-color: darken($fretmap-bg, 10%);
+    border-color: darken($fretmap-accent, 10%);
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+
+    img {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+    }
+  }
 }
