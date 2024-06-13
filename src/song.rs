@@ -5,6 +5,8 @@ use num_enum::{FromPrimitive, TryFromPrimitive};
 use rspotify::model::{AudioFeatures, FullTrack, Id, Modality};
 use std::fmt;
 use std::fmt::Formatter;
+use metadata_filter::filters;
+use metadata_filter::rules::{clean_explicit_filter_rules, live_filter_rules, remastered_filter_rules, trim_whitespace_filter_rules, version_filter_rules};
 
 #[derive(PartialEq, Clone, Debug)]
 pub struct SongPreview {
@@ -113,6 +115,7 @@ impl fmt::Display for Tempo {
 pub struct Song {
     pub id: String,
     pub title: String,
+    pub filtered_title: String,
     pub artist: String,
     pub cover_url: String,
     pub key: Key,
@@ -155,14 +158,23 @@ impl SongBuilder {
                 .ok_or(anyhow!("Neither preview nor full_track provided"))?
                 .try_into()?,
         );
-        // let audio_features = self
-        //     .audio_features
-        //     .ok_or(anyhow!("audio_features not provided"))?;
 
         let id = preview.id;
         let title = preview.title;
         let artist = preview.artist;
         let cover_url = preview.cover_url;
+
+        let filtered_title = filters::apply_rules(&title, &[
+            clean_explicit_filter_rules(),
+            remastered_filter_rules(),
+            live_filter_rules(),
+            version_filter_rules(),
+            trim_whitespace_filter_rules(),
+        ].concat());
+
+        // let audio_features = self
+        //     .audio_features
+        //     .ok_or(anyhow!("audio_features not provided"))?;
         // let tempo = audio_features.tempo.into();
         //
         // let note = audio_features.key.try_into()?;
@@ -179,6 +191,7 @@ impl SongBuilder {
         Ok(Song {
             id,
             title,
+            filtered_title,
             artist,
             cover_url,
             key,

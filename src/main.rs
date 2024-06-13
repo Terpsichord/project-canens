@@ -3,6 +3,7 @@ mod app;
 mod error;
 mod fretmap;
 mod home;
+mod hooktheory;
 mod search_bar;
 mod search_results;
 mod song;

@@ -6,6 +6,7 @@ use yew_hooks::{use_async_with_options, UseAsyncOptions};
 
 use crate::error::Error;
 use crate::fretmap::Fretmap;
+use crate::hooktheory::Hooktheory;
 use crate::spotify::SpotifyClient;
 
 #[derive(PartialEq, Properties)]
@@ -33,6 +34,7 @@ pub fn SongInfo(props: &SongInfoProps) -> Html {
                 <p><strong>{"Key: "}</strong>{song.key.clone()}</p>
                 <p><strong>{"Tempo: "}</strong>{song.tempo}</p>
                 <Fretmap song_key={song.key} />
+                <Hooktheory song_title={song.filtered_title} artist={song.artist}/>
             } else if let Some(error) = &song_handle.error {
                 <Error message={error.to_string()}/>
             }
