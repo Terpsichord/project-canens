@@ -24,7 +24,7 @@ pub fn SongCard(SongCardProps { song_preview }: &SongCardProps) -> Html {
             <img class="song-card-image" src={ song_preview.cover_url.clone() } />
             <div class="song-card-content">
                 <h4>{ &song_preview.title }</h4>
-                <p>{ &song_preview.artist }</p>
+                <p>{ &song_preview.artists.join(", ") }</p>
             </div>
         </button>
     }

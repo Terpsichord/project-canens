@@ -2,10 +2,7 @@ use anyhow::{anyhow, bail, Context};
 use derive_more::{Display, From};
 use itertools::Itertools;
 use metadata_filter::filters;
-use metadata_filter::rules::{
-    clean_explicit_filter_rules, live_filter_rules, remastered_filter_rules,
-    trim_whitespace_filter_rules, version_filter_rules,
-};
+use metadata_filter::rules::{clean_explicit_filter_rules, feature_filter_rules, live_filter_rules, remastered_filter_rules, trim_whitespace_filter_rules, version_filter_rules};
 use num_enum::{FromPrimitive, TryFromPrimitive};
 use rspotify::model::{AudioFeatures, FullTrack, Id, Modality};
 use std::fmt;
@@ -18,7 +15,7 @@ pub mod info;
 pub struct SongPreview {
     pub id: String,
     pub title: String,
-    pub artist: String,
+    pub artists: Vec<String>,
     pub cover_url: String,
 }
 
@@ -33,11 +30,11 @@ impl TryFrom<FullTrack> for SongPreview {
                 .id()
                 .into(),
             title: track.name,
-            artist: track
+            artists: track
                 .artists
                 .into_iter()
                 .map(|artist| artist.name)
-                .join(", "),
+                .collect(),
             cover_url: track
                 .album
                 .images
@@ -122,10 +119,16 @@ pub struct Song {
     pub id: String,
     pub title: String,
     pub filtered_title: String,
-    pub artist: String,
+    pub artists: Vec<String>,
     pub cover_url: String,
     pub key: Key,
     pub tempo: Tempo,
+}
+
+impl Song {
+    pub fn builder() -> SongBuilder {
+        SongBuilder::default()
+    }
 }
 
 #[derive(Default)]
@@ -167,7 +170,7 @@ impl SongBuilder {
 
         let id = preview.id;
         let title = preview.title;
-        let artist = preview.artist;
+        let artists = preview.artists;
         let cover_url = preview.cover_url;
 
         let filtered_title = filters::apply_rules(
@@ -175,6 +178,7 @@ impl SongBuilder {
             &[
                 clean_explicit_filter_rules(),
                 remastered_filter_rules(),
+                feature_filter_rules(),
                 live_filter_rules(),
                 version_filter_rules(),
                 trim_whitespace_filter_rules(),
@@ -195,7 +199,7 @@ impl SongBuilder {
             id,
             title,
             filtered_title,
-            artist,
+            artists,
             cover_url,
             key,
             tempo,
@@ -203,8 +207,4 @@ impl SongBuilder {
     }
 }
 
-impl Song {
-    pub fn builder() -> SongBuilder {
-        SongBuilder::default()
-    }
-}
+

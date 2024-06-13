@@ -31,10 +31,11 @@ pub fn SongInfo(props: &SongInfoProps) -> Html {
             } else if let Some(song) = song_handle.data.clone() {
                 <img src={song.cover_url} />
                 <h4>{song.title}</h4>
+                <p><strong>{"By: "}</strong>{song.artists.join(", ")}</p>
                 <p><strong>{"Key: "}</strong>{song.key.clone()}</p>
                 <p><strong>{"Tempo: "}</strong>{song.tempo}</p>
                 <Fretmap song_key={song.key} />
-                <Hooktheory song_title={song.filtered_title} artist={song.artist}/>
+                <Hooktheory song_title={song.filtered_title} artist={song.artists.into_iter().next().unwrap()}/>
             } else if let Some(error) = &song_handle.error {
                 <Error message={error.to_string()}/>
             }
