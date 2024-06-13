@@ -1,6 +1,6 @@
 use crate::error::Error;
 use crate::home::Home;
-use crate::song_info::SongInfo;
+use crate::song::info::SongInfo;
 use crate::spotify;
 use crate::spotify::SpotifyClient;
 use std::sync::Arc;

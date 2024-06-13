@@ -1,12 +1,18 @@
 use anyhow::{anyhow, bail, Context};
 use derive_more::{Display, From};
 use itertools::Itertools;
+use metadata_filter::filters;
+use metadata_filter::rules::{
+    clean_explicit_filter_rules, live_filter_rules, remastered_filter_rules,
+    trim_whitespace_filter_rules, version_filter_rules,
+};
 use num_enum::{FromPrimitive, TryFromPrimitive};
 use rspotify::model::{AudioFeatures, FullTrack, Id, Modality};
 use std::fmt;
 use std::fmt::Formatter;
-use metadata_filter::filters;
-use metadata_filter::rules::{clean_explicit_filter_rules, live_filter_rules, remastered_filter_rules, trim_whitespace_filter_rules, version_filter_rules};
+
+pub mod card;
+pub mod info;
 
 #[derive(PartialEq, Clone, Debug)]
 pub struct SongPreview {
@@ -164,29 +170,26 @@ impl SongBuilder {
         let artist = preview.artist;
         let cover_url = preview.cover_url;
 
-        let filtered_title = filters::apply_rules(&title, &[
-            clean_explicit_filter_rules(),
-            remastered_filter_rules(),
-            live_filter_rules(),
-            version_filter_rules(),
-            trim_whitespace_filter_rules(),
-        ].concat());
+        let filtered_title = filters::apply_rules(
+            &title,
+            &[
+                clean_explicit_filter_rules(),
+                remastered_filter_rules(),
+                live_filter_rules(),
+                version_filter_rules(),
+                trim_whitespace_filter_rules(),
+            ]
+            .concat(),
+        );
 
-        // let audio_features = self
-        //     .audio_features
-        //     .ok_or(anyhow!("audio_features not provided"))?;
-        // let tempo = audio_features.tempo.into();
-        //
-        // let note = audio_features.key.try_into()?;
-        // let mode = audio_features.mode.into();
-        // let key = Key { note, mode };
+        let audio_features = self
+            .audio_features
+            .ok_or(anyhow!("audio_features not provided"))?;
+        let tempo = audio_features.tempo.into();
 
-        // TODO: Remove these values, once I can get audio_features to work
-        let key = Key {
-            note: Note::Ab,
-            mode: Mode::Major,
-        };
-        let tempo = Tempo(100.0);
+        let note = audio_features.key.try_into()?;
+        let mode = audio_features.mode.into();
+        let key = Key { note, mode };
 
         Ok(Song {
             id,

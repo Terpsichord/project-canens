@@ -4,12 +4,8 @@ mod error;
 mod fretmap;
 mod home;
 mod hooktheory;
-mod search_bar;
-mod search_results;
+mod search;
 mod song;
-mod song_card;
-mod song_info;
-mod song_search;
 mod spotify;
 
 use app::App;

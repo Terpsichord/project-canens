@@ -1,3 +1,5 @@
+use crate::search::results::SearchResults;
+use crate::search::search_bar::SearchBar;
 use itertools::Itertools;
 use rspotify::model::{SearchResult, SearchType};
 use rspotify::prelude::*;
@@ -7,11 +9,12 @@ use yew::platform::spawn_local;
 use yew::prelude::*;
 use yew_hooks::prelude::*;
 
-use crate::search_bar::SearchBar;
-use crate::search_results::SearchResults;
+use crate::song::card::{SongCard, SongCardProps};
 use crate::song::SongPreview;
-use crate::song_card::{SongCard, SongCardProps};
 use crate::spotify::SpotifyClient;
+
+mod results;
+mod search_bar;
 
 async fn get_song_items(
     query: String,

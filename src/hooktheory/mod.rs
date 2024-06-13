@@ -10,9 +10,14 @@ fn filter_string(string: &str) -> String {
         .collect()
 }
 
-fn hooktheory_url_from_song(song_title: &str, artist: &str)  -> String {
+fn hooktheory_url_from_song(song_title: &str, artist: &str) -> String {
     let base = "https://www.hooktheory.com/theorytab/view/";
-    format!("{}{}/{}", base, filter_string(artist), filter_string(song_title))
+    format!(
+        "{}{}/{}",
+        base,
+        filter_string(artist),
+        filter_string(song_title)
+    )
 }
 
 #[derive(PartialEq, Properties)]

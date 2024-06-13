@@ -1,4 +1,4 @@
-use crate::song_search::SongSearch;
+use crate::search::SongSearch;
 use yew::prelude::*;
 
 #[derive(PartialEq, Properties)]

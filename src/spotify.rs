@@ -52,16 +52,15 @@ impl SpotifyClient {
             .track(track_id.clone(), None)
             .await
             .map_err(|e| anyhow!("Failed to get track: {}", e))?;
-        // TODO: Work out why audio_features gets ratelimited immediately
-        // let audio_features = self
-        //     .client_creds
-        //     .track_features(track_id)
-        //     .await
-        //     .map_err(|e| anyhow!("Failed to get audio features for track: {}", e))?;
+        let audio_features = self
+            .client_creds
+            .track_features(track_id)
+            .await
+            .map_err(|e| anyhow!("Failed to get audio features for track: {}", e))?;
 
         let song = Song::builder()
             .full_track(full_track)
-            // .audio_features(audio_features)
+            .audio_features(audio_features)
             .build()?;
 
         Ok(song)
