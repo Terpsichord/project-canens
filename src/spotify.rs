@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use anyhow::anyhow;
+use anyhow::{anyhow, bail};
 use implicit_clone::ImplicitClone;
 use rspotify::clients::BaseClient;
 use rspotify::model::TrackId;
@@ -20,18 +20,19 @@ impl PartialEq for SpotifyClient {
     }
 }
 
-#[cfg(debug_assertions)]
-fn credentials() -> Credentials {
+#[cfg(debug_secrets)]
+fn credentials() -> anyhow::Result<Credentials> {
+    log::debug!("Using credentials from env.rs");
     include!(concat!(env!("OUT_DIR"), "/env.rs"))
 }
 
-#[cfg(not(debug_assertions))]
-fn credentials() -> Credentials {
-    panic!("Can't currently get Spotify credentials in release mode");
+#[cfg(not(debug_secrets))]
+fn credentials() -> anyhow::Result<Credentials> {
+    bail!("Can't currently get Spotify credentials in release mode");
 }
 
 pub async fn authorize_spotify() -> anyhow::Result<SpotifyClient> {
-    let client_creds = ClientCredsSpotify::new(credentials());
+    let client_creds = ClientCredsSpotify::new(credentials()?);
 
     client_creds
         .request_token()
