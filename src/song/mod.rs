@@ -2,7 +2,10 @@ use anyhow::{anyhow, bail, Context};
 use derive_more::{Display, From};
 use itertools::Itertools;
 use metadata_filter::filters;
-use metadata_filter::rules::{clean_explicit_filter_rules, feature_filter_rules, live_filter_rules, remastered_filter_rules, trim_whitespace_filter_rules, version_filter_rules};
+use metadata_filter::rules::{
+    clean_explicit_filter_rules, feature_filter_rules, live_filter_rules, remastered_filter_rules,
+    trim_whitespace_filter_rules, version_filter_rules,
+};
 use num_enum::{FromPrimitive, TryFromPrimitive};
 use rspotify::model::{AudioFeatures, FullTrack, Id, Modality};
 use std::fmt;
@@ -206,5 +209,3 @@ impl SongBuilder {
         })
     }
 }
-
-
