@@ -18,9 +18,12 @@ jobs:
       - name: Install target
         run: rustup target add wasm32-unknown-unknown
 
-      - if: matrix.task == 'test'
-        run: cargo test --all
-      - if: matrix.task == 'format'
-        run: cargo fmt --all -- --check
-      - if: matrix.task == 'clippy'
-        run: cargo clippy --all -- -D warnings
+      - name: Run task
+        run: |
+          if [ "${{ matrix.task }}" == "test" ]; then
+            cargo test --all
+          elif [ "${{ matrix.task }}" == "format" ]; then
+            cargo fmt --all -- --check
+          elif [ "${{ matrix.task }}" == "clippy" ]; then
+            cargo clippy --all -- -D warnings
+          fi
