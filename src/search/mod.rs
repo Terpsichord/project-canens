@@ -1,10 +1,10 @@
 use crate::search::results::SearchResults;
 use crate::search::search_bar::SearchBar;
-use itertools::Itertools;
+
 use rspotify::model::{SearchResult, SearchType};
 use rspotify::prelude::*;
 use rspotify::ClientCredsSpotify;
-use web_sys::wasm_bindgen::UnwrapThrowExt;
+
 use yew::platform::spawn_local;
 use yew::prelude::*;
 use yew_hooks::prelude::*;

@@ -1,9 +1,8 @@
-use crate::app::Route;
-use crate::song::SongPreview;
-use anyhow::Context;
-use itertools::Itertools;
 use yew::*;
 use yew_router::prelude::*;
+
+use crate::app::Route;
+use crate::song::SongPreview;
 
 #[derive(PartialEq, Clone, Debug, Properties)]
 pub struct SongCardProps {

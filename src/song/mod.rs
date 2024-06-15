@@ -1,12 +1,11 @@
 use anyhow::{anyhow, bail, Context};
 use derive_more::{Display, From};
-use itertools::Itertools;
 use metadata_filter::filters;
 use metadata_filter::rules::{
     clean_explicit_filter_rules, feature_filter_rules, live_filter_rules, remastered_filter_rules,
     trim_whitespace_filter_rules, version_filter_rules,
 };
-use num_enum::{FromPrimitive, TryFromPrimitive};
+use num_enum::TryFromPrimitive;
 use rspotify::model::{AudioFeatures, FullTrack, Id, Modality};
 use std::fmt;
 use std::fmt::Formatter;
@@ -70,7 +69,7 @@ pub enum Note {
 impl Note {
     // This only works if the variants of the `Key` enum are named accordingly
     pub fn is_accidental(&self) -> bool {
-        self.to_string().ends_with("b")
+        self.to_string().ends_with('b')
     }
 }
 
@@ -141,6 +140,7 @@ pub struct SongBuilder {
     audio_features: Option<AudioFeatures>,
 }
 
+#[allow(dead_code)]
 impl SongBuilder {
     pub fn new() -> Self {
         Self::default()
