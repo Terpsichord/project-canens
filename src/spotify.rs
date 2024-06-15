@@ -22,8 +22,7 @@ impl PartialEq for SpotifyClient {
 
 #[cfg(debug_secrets)]
 fn credentials() -> anyhow::Result<Credentials> {
-    log::debug!("Using credentials from env.rs");
-    include!(concat!(env!("OUT_DIR"), "/env.rs"))
+    Ok(include!(concat!(env!("OUT_DIR"), "/env.rs")))
 }
 
 #[cfg(not(debug_secrets))]
