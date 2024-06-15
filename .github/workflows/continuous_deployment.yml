@@ -18,18 +18,13 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CARGO_TERM_COLOR: always
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/bin
-            ~/.cargo/git
-            ~/.cargo/registry
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+        uses: Swatinem/rust-cache@v2
 
       - name: Install dependencies
         run: |

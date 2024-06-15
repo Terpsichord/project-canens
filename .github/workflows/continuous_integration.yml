@@ -4,21 +4,22 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    env:
+      CARGO_TERM_COLOR: always
+    strategy:
+      matrix:
+        task: [test, format, clippy]
     steps:
-      - uses: actions/checkout@v4
-      - run: cargo test --all
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Restore cache
+        uses: Swatinem/rust-cache@v2
+      - name: Install target
+        run: rustup target add wasm32-unknown-unknown
 
-  format:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - run: cargo fmt --all -- --check
-
-  clippy:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-      - run: cargo clippy --all -- -D warnings
+      - if: matrix.task == 'test'
+        run: cargo test --all
+      - if: matrix.task == 'format'
+        run: cargo fmt --all -- --check
+      - if: matrix.task == 'clippy'
+        run: cargo clippy --all -- -D warnings
