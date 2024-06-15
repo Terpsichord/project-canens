@@ -6,7 +6,7 @@ use std::io::Write;
 use std::path::Path;
 
 pub fn main() {
-    if Ok("debug".to_string()) == env::var("PROFILE") {
+    if Some("1".to_string()) == env::var("DEBUG_SECRETS").ok() {
         println!("cargo:rerun-if-changed=.env");
         let path = Path::new(&env::var("OUT_DIR").unwrap()).join("env.rs");
         let mut file = BufWriter::new(File::create(&path).unwrap());
