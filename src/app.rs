@@ -3,7 +3,7 @@ use crate::home::Home;
 use crate::song::info::SongInfo;
 use crate::spotify;
 use crate::spotify::SpotifyClient;
-use std::sync::Arc;
+use std::rc::Rc;
 use yew::prelude::*;
 use yew_hooks::{use_async_with_options, UseAsyncOptions};
 use yew_router::{BrowserRouter, Routable, Switch};
@@ -27,7 +27,7 @@ fn switch(route: Route) -> Html {
 #[function_component(App)]
 pub fn app() -> Html {
     let spotify_handle = use_async_with_options(
-        async move { spotify::authorize_spotify().await.map_err(Arc::new) },
+        async move { spotify::authorize_spotify().await.map_err(Rc::new) },
         UseAsyncOptions::enable_auto(),
     );
 

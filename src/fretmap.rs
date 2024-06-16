@@ -1,7 +1,7 @@
 use crate::song::Key;
 use yew::prelude::*;
 
-pub fn fretmap_url_from_key(key: Key) -> String {
+pub fn fretmap_url_from_key(key: &Key) -> String {
     let note_name = key
         .to_string()
         .to_lowercase()
@@ -31,7 +31,7 @@ pub struct FretmapProps {
 #[function_component]
 pub fn Fretmap(props: &FretmapProps) -> Html {
     html! {
-        <a href={fretmap_url_from_key(props.song_key.clone())} class="fretmap">
+        <a href={fretmap_url_from_key(&props.song_key)} class="fretmap">
             <div>
                 <img src={"https://fretmap.app/images/icons/icon-144x144.png"} />
                 { "Show scale in fretmap.app" }

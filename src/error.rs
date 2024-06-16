@@ -2,7 +2,7 @@ use yew::prelude::*;
 
 #[derive(PartialEq, Properties)]
 pub struct ErrorProps {
-    pub message: String,
+    pub message: AttrValue,
 }
 
 #[function_component]

@@ -1,10 +1,11 @@
+use yew::html::ImplicitClone;
 use yew::*;
 use yew_router::prelude::*;
 
 use crate::app::Route;
 use crate::song::SongPreview;
 
-#[derive(PartialEq, Clone, Debug, Properties)]
+#[derive(PartialEq, Clone, Debug, Properties, ImplicitClone)]
 pub struct SongCardProps {
     pub song_preview: SongPreview,
 }
@@ -13,10 +14,14 @@ pub struct SongCardProps {
 pub fn SongCard(SongCardProps { song_preview }: &SongCardProps) -> Html {
     let navigator = use_navigator().unwrap();
 
-    let id = song_preview.id.clone();
-    let onclick = Callback::from(move |_| {
-        navigator.push(&Route::Song { id: id.clone() });
-    });
+    let onclick = {
+        let route = Route::Song {
+            id: song_preview.id.clone(),
+        };
+        Callback::from(move |_| {
+            navigator.push(&route);
+        })
+    };
 
     html! {
         <button {onclick} class="song-card">

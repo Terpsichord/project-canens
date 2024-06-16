@@ -22,15 +22,15 @@ fn hooktheory_url_from_song(song_title: &str, artist: &str) -> String {
 
 #[derive(PartialEq, Properties)]
 pub struct HooktheoryProps {
-    pub song_title: String,
-    pub artist: String,
+    pub song_title: AttrValue,
+    pub artist: AttrValue,
 }
 
 #[function_component]
 pub fn Hooktheory(props: &HooktheoryProps) -> Html {
-    let url = hooktheory_url_from_song(&props.song_title, &props.artist);
+    let href = hooktheory_url_from_song(props.song_title.as_str(), props.artist.as_str());
     html! {
-        <a href={url.clone()} class="hooktheory">
+        <a {href} class="hooktheory">
             <div>
                 <img src={"https://www.hooktheory.com/images/logos/hooktheory-logo-2021.svg"} />
                 { "Show TheoryTab on Hooktheory" }

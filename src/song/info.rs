@@ -1,4 +1,4 @@
-use std::sync::Arc;
+use std::rc::Rc;
 
 use yew::prelude::*;
 use yew_hooks::{use_async_with_options, UseAsyncOptions};
@@ -10,7 +10,7 @@ use crate::spotify::SpotifyClient;
 
 #[derive(PartialEq, Properties)]
 pub struct SongInfoProps {
-    pub id: String,
+    pub id: AttrValue,
 }
 
 #[function_component]
@@ -19,7 +19,7 @@ pub fn SongInfo(props: &SongInfoProps) -> Html {
 
     let id = props.id.clone();
     let song_handle = use_async_with_options(
-        async move { spotify.get_song_from_id(&id).await.map_err(Arc::new) },
+        async move { spotify.get_song_from_id(id.as_str()).await.map_err(Rc::new) },
         UseAsyncOptions::enable_auto(),
     );
 

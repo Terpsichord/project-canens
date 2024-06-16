@@ -1,5 +1,6 @@
 use crate::search::results::SearchResults;
 use crate::search::search_bar::SearchBar;
+use implicit_clone::unsync::IArray;
 
 use rspotify::model::{SearchResult, SearchType};
 use rspotify::prelude::*;
@@ -17,13 +18,13 @@ mod results;
 mod search_bar;
 
 async fn get_song_items(
-    query: String,
+    query: &str,
     spotify: &ClientCredsSpotify,
     search_length: u32,
-) -> Vec<SongCardProps> {
+) -> IArray<SongCardProps> {
     let search_result = spotify
         .search(
-            query.as_str(),
+            query,
             SearchType::Track,
             None,
             None,
@@ -44,7 +45,7 @@ async fn get_song_items(
     full_tracks
         .into_iter()
         .filter_map(|track| track.try_into().ok())
-        .map(|song: SongPreview| SongCardProps { song_preview: song })
+        .map(|song_preview: SongPreview| SongCardProps { song_preview })
         .collect()
 }
 
@@ -60,7 +61,7 @@ pub fn SongSearch(props: &SongSearchProps) -> Html {
         .client_creds;
 
     #[allow(clippy::redundant_closure)]
-    let results = use_state(|| vec![]);
+    let results = use_state(|| IArray::EMPTY);
 
     let update_results = {
         let results = results.clone();
@@ -70,7 +71,7 @@ pub fn SongSearch(props: &SongSearchProps) -> Html {
             let results = results.clone();
             let spotify = spotify.clone();
             spawn_local(async move {
-                let songs = get_song_items(query, &spotify, search_length).await;
+                let songs = get_song_items(&query, &spotify, search_length).await;
 
                 results.set(songs);
             });
