@@ -1,3 +1,4 @@
+use crate::external_button::ExternalButton;
 use deunicode::deunicode;
 use yew::prelude::*;
 
@@ -28,13 +29,12 @@ pub struct HooktheoryProps {
 
 #[function_component]
 pub fn Hooktheory(props: &HooktheoryProps) -> Html {
-    let href = hooktheory_url_from_song(props.song_title.as_str(), props.artist.as_str());
     html! {
-        <a {href} class="hooktheory">
-            <div>
-                <img src={"https://www.hooktheory.com/images/logos/hooktheory-logo-2021.svg"} />
-                { "Show TheoryTab on Hooktheory" }
-            </div>
-        </a>
+        <ExternalButton
+            class="hooktheory"
+            href={hooktheory_url_from_song(props.song_title.as_str(), props.artist.as_str())}
+            img_src="https://www.hooktheory.com/images/logos/hooktheory-logo-2021.svg"
+            text="Show TheoryTab on Hooktheory"
+        />
     }
 }

@@ -25,8 +25,7 @@
   width: max-content;
 }
 
-
-@mixin song-button($accent-color, $bg-color) {
+@mixin external-button($accent-color, $bg-color) {
   display: block;
   text-decoration: none;
   color: $accent-color;
@@ -41,6 +40,7 @@
   font-family: sans-serif;
 
   transition: filter 0.3s;
+
   &:hover {
     filter: brightness(90%);
   }
@@ -55,13 +55,14 @@
       margin-right: 8px;
     }
   }
+
 }
 
 .fretmap {
-  @include song-button(#cc4b00, #ffe2a0)
+  @include external-button(#cc4b00, #ffe2a0)
 }
 
 .hooktheory {
-  @include song-button(#4f9fd2, #ffffff)
+  @include external-button(#4f9fd2, #ffffff)
 }
 

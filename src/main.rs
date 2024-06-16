@@ -1,6 +1,7 @@
 mod app;
 
 mod error;
+mod external_button;
 mod fretmap;
 mod home;
 mod hooktheory;

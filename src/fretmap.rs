@@ -1,3 +1,4 @@
+use crate::external_button::ExternalButton;
 use crate::song::Key;
 use yew::prelude::*;
 
@@ -31,11 +32,11 @@ pub struct FretmapProps {
 #[function_component]
 pub fn Fretmap(props: &FretmapProps) -> Html {
     html! {
-        <a href={fretmap_url_from_key(&props.song_key)} class="fretmap">
-            <div>
-                <img src={"https://fretmap.app/images/icons/icon-144x144.png"} />
-                { "Show scale in fretmap.app" }
-            </div>
-        </a>
+        <ExternalButton
+            class="fretmap"
+            href={fretmap_url_from_key(&props.song_key)}
+            img_src="https://fretmap.app/images/icons/icon-144x144.png"
+            text="Show scale in fretmap.app"
+        />
     }
 }
