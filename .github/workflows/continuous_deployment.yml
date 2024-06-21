@@ -2,7 +2,7 @@ name: CD (GitHub Pages)
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 
   workflow_dispatch:
 
@@ -14,6 +14,10 @@ permissions:
 concurrency:
   group: pages
   cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: frontend
 
 jobs:
   build:
