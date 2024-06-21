@@ -1,16 +1,31 @@
+$background-color: #0094d4;
+$base-font-size: 16px;
+
+body {
+  background-color: $background-color;
+  color: white;
+  font-family: sans-serif;
+  font-size: $base-font-size;
+}
+
+img {
+  border-radius: 1.25rem;
+}
+
 .song-card {
   display: flex;
   align-items: center;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px;
-  width: 400px;
+  background-color: desaturate(lighten($background-color, 30%), 30%);
+  border: 1px solid darken($background-color, 20%);
+  border-radius: 0.5rem;
+  padding: 0.625rem;
+  width: 25rem;
 
   &-image {
-    width: 100px;
+    width: 6.25rem;
     height: auto;
-    margin-right: 20px;
-    border-radius: 8px;
+    margin-right: 1.25rem;
+    border-radius: 0.5rem;
   }
 
   &-content {
@@ -25,19 +40,16 @@
   width: max-content;
 }
 
-@mixin external-button($accent-color, $bg-color) {
+.external-button {
   display: block;
   text-decoration: none;
-  color: $accent-color;
-  background-color: $bg-color;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: 2px solid $accent-color;
-  margin-bottom: 10px;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  border: 0.125rem solid;
+  margin-bottom: 0.625rem;
   width: max-content;
   text-align: center;
   font-weight: bold;
-  font-family: sans-serif;
 
   transition: filter 0.3s;
 
@@ -50,19 +62,9 @@
     align-items: center;
 
     img {
-      width: 24px;
-      height: 24px;
-      margin-right: 8px;
+      width: 1.5rem;
+      height: 1.5rem;
+      margin-right: 0.5rem;
     }
   }
-
 }
-
-.fretmap {
-  @include external-button(#cc4b00, #ffe2a0)
-}
-
-.hooktheory {
-  @include external-button(#4f9fd2, #ffffff)
-}
-

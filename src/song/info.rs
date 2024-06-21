@@ -7,6 +7,7 @@ use crate::error::Error;
 use crate::fretmap::Fretmap;
 use crate::hooktheory::Hooktheory;
 use crate::spotify::SpotifyClient;
+use crate::tabs::Tabs;
 
 #[derive(PartialEq, Properties)]
 pub struct SongInfoProps {
@@ -34,9 +35,17 @@ pub fn SongInfo(props: &SongInfoProps) -> Html {
                 <p><strong>{"Key: "}</strong>{song.key.clone()}</p>
                 <p><strong>{"Tempo: "}</strong>{song.tempo}</p>
                 <Fretmap song_key={song.key} />
-                <Hooktheory song_title={song.filtered_title} artist={song.artists.into_iter().next().unwrap()}/>
+                {{
+                    let filtered_title = AttrValue::from(song.filtered_title);
+                    let first_artist = AttrValue::from(song.artists.into_iter().next().unwrap());
+                    html! {
+                        <>
+                            <Hooktheory song_title={filtered_title.clone()} artist={first_artist.clone()}/>
+                            <Tabs song_title={filtered_title} artist={first_artist} />
+                        </>
+                    }}}
             } else if let Some(error) = &song_handle.error {
-                <Error message={error.to_string()}/>
+                <Error {error}/>
             }
         </div>
     }

@@ -1,3 +1,5 @@
+#![warn(clippy::unwrap_used)]
+
 mod app;
 
 mod error;
@@ -8,6 +10,7 @@ mod hooktheory;
 mod search;
 mod song;
 mod spotify;
+mod tabs;
 
 use app::App;
 use wasm_logger::Config;

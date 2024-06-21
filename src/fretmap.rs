@@ -10,13 +10,11 @@ pub fn fretmap_url_from_key(key: &Key) -> String {
         .next()
         .unwrap()
         .to_string();
-    log::debug!("note_name: {note_name}");
     let key_name = if key.note.is_accidental() {
         note_name + "-flat"
     } else {
         note_name
     };
-    log::debug!("note_name: {key_name}");
     let mode = key.mode.to_string().to_lowercase();
     log::debug!("note_name: {mode}");
 
@@ -33,10 +31,11 @@ pub struct FretmapProps {
 pub fn Fretmap(props: &FretmapProps) -> Html {
     html! {
         <ExternalButton
-            class="fretmap"
             href={fretmap_url_from_key(&props.song_key)}
             img_src="https://fretmap.app/images/icons/icon-144x144.png"
             text="Show scale in fretmap.app"
+            accent_color="#cc4b00"
+            bg_color="#ffe2a0"
         />
     }
 }

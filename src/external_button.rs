@@ -2,23 +2,30 @@ use yew::prelude::*;
 
 #[derive(Clone, PartialEq, Properties)]
 pub struct ExternalButtonProps {
-    #[prop_or_default]
-    pub class: Classes,
     pub href: AttrValue,
     pub img_src: AttrValue,
     pub text: AttrValue,
+    pub accent_color: AttrValue,
+    pub bg_color: AttrValue,
 }
 
 #[function_component]
 pub fn ExternalButton(props: &ExternalButtonProps) -> Html {
     let ExternalButtonProps {
-        class,
         href,
         img_src: src,
         text,
+        accent_color,
+        bg_color,
     } = props.clone();
+
+    let style = format!(
+        "color: {}; background-color: {}; border-color: {};",
+        accent_color, bg_color, accent_color
+    );
+
     html! {
-        <a {href} {class}>
+        <a {href} {style} class={classes!("external-button")}>
             <div>
                 <img {src} />
                 { text }

@@ -31,10 +31,11 @@ pub struct HooktheoryProps {
 pub fn Hooktheory(props: &HooktheoryProps) -> Html {
     html! {
         <ExternalButton
-            class="hooktheory"
             href={hooktheory_url_from_song(props.song_title.as_str(), props.artist.as_str())}
             img_src="https://www.hooktheory.com/images/logos/hooktheory-logo-2021.svg"
             text="Show TheoryTab on Hooktheory"
+            accent_color="#4f9fd2"
+            bg_color="#ffffff"
         />
     }
 }

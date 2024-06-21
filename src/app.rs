@@ -36,7 +36,7 @@ pub fn app() -> Html {
             if spotify_handle.loading {
                 { "Loading..." }
             } else if let Some(error) = &spotify_handle.error {
-                <Error message={error.to_string()}/>
+                <Error {error}/>
             } else if let Some(spotify_client) = &spotify_handle.data {
                 <BrowserRouter>
                     <ContextProvider<SpotifyClient> context={spotify_client}>

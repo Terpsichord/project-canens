@@ -22,7 +22,7 @@ impl PartialEq for SpotifyClient {
 
 #[cfg(debug_secrets)]
 fn credentials() -> anyhow::Result<Credentials> {
-    Ok(include!(concat!(env!("OUT_DIR"), "/env.rs")))
+    Ok(include!(concat!(env!("OUT_DIR"), "/spotify_secret.rs")))
 }
 
 #[cfg(not(debug_secrets))]
@@ -36,7 +36,7 @@ pub async fn authorize_spotify() -> anyhow::Result<SpotifyClient> {
     client_creds
         .request_token()
         .await
-        .map_err(|e| anyhow::anyhow!("Couldn't get Spotify access token: {:?}", e))?;
+        .map_err(|e| anyhow::anyhow!("Failed to get Spotify access token: {:?}", e))?;
 
     Ok(SpotifyClient {
         client_creds: Rc::new(client_creds),
