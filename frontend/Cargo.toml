@@ -11,7 +11,7 @@ input_yew = "0.1.10"
 itertools = "0.13.0"
 rspotify = "0.13.2"
 wasm-bindgen-test = "0.3.42"
-yew = { version="0.21.0", features=["csr"] }
+yew = { version = "0.21.0", features = ["csr"] }
 wasm-bindgen-futures = "0.4.42"
 web-sys = { version = "0.3.69", features = ["HtmlInputElement"] }
 implicit-clone = "0.4.9"
@@ -34,9 +34,11 @@ ordered-float = "4.2.0"
 gloo-net = "0.5.0"
 tap = "1.0.1"
 regex = "1.10.5"
+escape-bytes = "0.1.1"
 
 [build-dependencies]
-rspotify = { version = "0.13.2", features = ["env-file"]}
+rspotify = { version = "0.13.2", features = ["env-file"] }
 
 [profile.dev]
 incremental = true
+

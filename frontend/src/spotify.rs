@@ -1,10 +1,13 @@
+use std::env;
 use std::rc::Rc;
 
 use anyhow::{anyhow, bail};
 use implicit_clone::ImplicitClone;
 use rspotify::clients::BaseClient;
 use rspotify::model::TrackId;
-use rspotify::{ClientCredsSpotify, Credentials};
+use rspotify::{
+    ClientCredsSpotify, Config, Credentials, DEFAULT_API_BASE_URL, DEFAULT_AUTH_BASE_URL,
+};
 
 use crate::song::Song;
 
@@ -21,17 +24,25 @@ impl PartialEq for SpotifyClient {
 }
 
 #[cfg(debug_secrets)]
-fn credentials() -> anyhow::Result<Credentials> {
-    Ok(include!(concat!(env!("OUT_DIR"), "/spotify_secret.rs")))
+fn credentials() -> ClientCredsSpotify {
+    ClientCredsSpotify::new(include!(concat!(env!("OUT_DIR"), "/spotify_secret.rs")))
 }
 
+const SPOTIFY_PROXY_URL: &'static str = "https://project-canens.vercel.app/api/spotify?url=";
+
 #[cfg(not(debug_secrets))]
-fn credentials() -> anyhow::Result<Credentials> {
-    bail!("Can't currently get Spotify credentials in release mode");
+fn credentials() -> ClientCredsSpotify {
+    ClientCredsSpotify::with_config(
+        Credentials::new("", ""),
+        Config {
+            auth_base_url: SPOTIFY_PROXY_URL.to_owned() + DEFAULT_AUTH_BASE_URL,
+            ..Default::default()
+        },
+    )
 }
 
 pub async fn authorize_spotify() -> anyhow::Result<SpotifyClient> {
-    let client_creds = ClientCredsSpotify::new(credentials()?);
+    let client_creds = credentials();
 
     client_creds
         .request_token()

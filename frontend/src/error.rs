@@ -15,10 +15,11 @@ impl PartialEq for ErrorProps {
 
 #[function_component]
 pub fn Error(props: &ErrorProps) -> Html {
+    eprintln!("{}", props.error);
     html! {
-        <span style="color: red">
+        <div style="white-space: pre-line; color: red; background-color: white">
             <strong>{ "Error: " }</strong>
-            { &format!("{:?}", props.error) }
-        </span>
+            { &format!("{:#}", props.error) }
+        </div>
     }
 }

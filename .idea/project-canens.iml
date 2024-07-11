@@ -5,6 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/frontend/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/dist" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/target" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/.vercel" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
