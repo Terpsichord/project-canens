@@ -1,4 +1,4 @@
-mod scraper;
+// mod scraper;
 
 use crate::error::Error;
 use crate::external_button::ExternalButton;
@@ -13,6 +13,17 @@ pub struct TabsProps {
     pub artist: AttrValue,
 }
 
+fn get_tabs_url(song_title: &str, artist: &str) -> anyhow::Result<String> {
+    let params = serde_urlencoded::to_string([
+        ("search_type", "title"),
+        ("value", &format!("{} {}", song_title, artist)),
+    ])?;
+    Ok(format!(
+        "https://www.ultimate-guitar.com/search.php?{}",
+        params
+    ))
+}
+
 #[function_component]
 pub fn Tabs(props: &TabsProps) -> Html {
     let url_handle = {
@@ -20,8 +31,7 @@ pub fn Tabs(props: &TabsProps) -> Html {
         let artist = props.artist.clone();
         use_async_with_options(
             async move {
-                scraper::get_tabs_url(&song_title, &artist)
-                    .await
+                get_tabs_url(&song_title, &artist)
                     .map(IString::from)
                     .map_err(Rc::new)
             },

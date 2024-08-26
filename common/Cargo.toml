@@ -1,0 +1,14 @@
+[package]
+name = "project-canens-common"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.86"
+derive_more = "0.99.18"
+implicit-clone = { version = "0.4.9", features = ["serde"] }
+metadata-filter = "0.3.0"
+num_enum = "0.7.2"
+rspotify-model = "0.13.2"
+serde = { version = "1.0.204", features = ["derive"] }
+yew = "0.21.0"

@@ -1,5 +1,5 @@
 use crate::external_button::ExternalButton;
-use crate::song::Key;
+use project_canens_common::Key;
 use yew::prelude::*;
 
 pub fn fretmap_url_from_key(key: &Key) -> String {

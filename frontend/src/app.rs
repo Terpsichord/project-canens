@@ -1,12 +1,10 @@
-use crate::error::Error;
-use crate::home::Home;
-use crate::song::info::SongInfo;
-use crate::spotify;
-use crate::spotify::SpotifyClient;
-use std::rc::Rc;
+use crate::backend::BackendClient;
 use yew::prelude::*;
-use yew_hooks::{use_async_with_options, UseAsyncOptions};
 use yew_router::{BrowserRouter, Routable, Switch};
+
+use crate::home::Home;
+use crate::navbar::Navbar;
+use crate::song::page::SongPage;
 
 #[derive(Routable, Clone, PartialEq)]
 pub enum Route {
@@ -20,30 +18,21 @@ fn switch(route: Route) -> Html {
     let search_length = 5;
     match route {
         Route::Home => html! { <Home {search_length} /> },
-        Route::Song { id } => html! { <SongInfo {id} /> },
+        Route::Song { id } => html! { <SongPage {id} /> },
     }
 }
 
 #[function_component(App)]
 pub fn app() -> Html {
-    let spotify_handle = use_async_with_options(
-        async move { spotify::authorize_spotify().await.map_err(Rc::new) },
-        UseAsyncOptions::enable_auto(),
-    );
-
+    let backend = BackendClient::new();
     html! {
-        <main>
-            if spotify_handle.loading {
-                { "Loading..." }
-            } else if let Some(error) = &spotify_handle.error {
-                <Error {error}/>
-            } else if let Some(spotify_client) = &spotify_handle.data {
-                <BrowserRouter>
-                    <ContextProvider<SpotifyClient> context={spotify_client}>
-                        <Switch<Route> render={switch} />
-                    </ContextProvider<SpotifyClient>>
-                </BrowserRouter>
-            }
-        </main>
+        <BrowserRouter>
+            <Navbar />
+            <main>
+                <ContextProvider<BackendClient> context={backend}>
+                    <Switch<Route> render={switch} />
+                </ContextProvider<BackendClient>>
+            </main>
+        </BrowserRouter>
     }
 }

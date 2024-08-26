@@ -2,13 +2,16 @@
 
 mod app;
 
+mod backend;
 mod error;
 mod external_button;
 mod fretmap;
 mod home;
 mod hooktheory;
+mod navbar;
 mod search;
 mod song;
+#[cfg(debug_secrets)]
 mod spotify;
 mod tabs;
 

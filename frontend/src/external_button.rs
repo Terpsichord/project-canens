@@ -28,7 +28,7 @@ pub fn ExternalButton(props: &ExternalButtonProps) -> Html {
         <a {href} {style} class={classes!("external-button")}>
             <div>
                 <img {src} />
-                { text }
+                <span>{ text }</span>
             </div>
         </a>
     }

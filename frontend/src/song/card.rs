@@ -1,14 +1,8 @@
-use yew::html::ImplicitClone;
+use project_canens_common::SongCardProps;
 use yew::*;
 use yew_router::prelude::*;
 
 use crate::app::Route;
-use crate::song::SongPreview;
-
-#[derive(PartialEq, Clone, Debug, Properties, ImplicitClone)]
-pub struct SongCardProps {
-    pub song_preview: SongPreview,
-}
 
 #[function_component]
 pub fn SongCard(SongCardProps { song_preview }: &SongCardProps) -> Html {

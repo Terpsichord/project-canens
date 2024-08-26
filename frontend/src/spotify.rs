@@ -1,13 +1,10 @@
-use std::env;
 use std::rc::Rc;
 
-use anyhow::{anyhow, bail};
+use anyhow::anyhow;
 use implicit_clone::ImplicitClone;
 use rspotify::clients::BaseClient;
 use rspotify::model::TrackId;
-use rspotify::{
-    ClientCredsSpotify, Config, Credentials, DEFAULT_API_BASE_URL, DEFAULT_AUTH_BASE_URL,
-};
+use rspotify::{ClientCredsSpotify, Config, Credentials, DEFAULT_AUTH_BASE_URL};
 
 use crate::song::Song;
 
@@ -23,22 +20,9 @@ impl PartialEq for SpotifyClient {
     }
 }
 
-#[cfg(debug_secrets)]
 fn credentials() -> ClientCredsSpotify {
+    log::debug!("DEBUG_SECRETS enabled");
     ClientCredsSpotify::new(include!(concat!(env!("OUT_DIR"), "/spotify_secret.rs")))
-}
-
-const SPOTIFY_PROXY_URL: &'static str = "https://project-canens.vercel.app/api/spotify?url=";
-
-#[cfg(not(debug_secrets))]
-fn credentials() -> ClientCredsSpotify {
-    ClientCredsSpotify::with_config(
-        Credentials::new("", ""),
-        Config {
-            auth_base_url: SPOTIFY_PROXY_URL.to_owned() + DEFAULT_AUTH_BASE_URL,
-            ..Default::default()
-        },
-    )
 }
 
 pub async fn authorize_spotify() -> anyhow::Result<SpotifyClient> {

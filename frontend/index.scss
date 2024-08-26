@@ -8,8 +8,36 @@ body {
   font-size: $base-font-size;
 }
 
+.navbar {
+  overflow: hidden;
+}
+
 img {
   border-radius: 1.25rem;
+}
+
+.song-page {
+  display: flex;
+  align-items: flex-start;
+
+  img {
+    margin-right: 20px;
+    height: auto;
+  }
+
+  &-contents {
+    margin-top: 70px;
+
+    h4 {
+      margin: 0;
+      padding: 0;
+      font-size: 1.5em;
+    }
+
+    p {
+      margin: 0.5em 0;
+    }
+  }
 }
 
 .song-card {
@@ -47,7 +75,7 @@ img {
   border-radius: 0.5rem;
   border: 0.125rem solid;
   margin-bottom: 0.625rem;
-  width: max-content;
+  width: 300px;
   text-align: center;
   font-weight: bold;
 
@@ -65,6 +93,12 @@ img {
       width: 1.5rem;
       height: 1.5rem;
       margin-right: 0.5rem;
+    }
+
+    span {
+      width: 100%;
+      display: flex;
+      justify-content: center;
     }
   }
 }

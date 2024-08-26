@@ -1,53 +1,15 @@
-use crate::search::results::SearchResults;
-use crate::search::search_bar::SearchBar;
 use implicit_clone::unsync::IArray;
-
-use rspotify::model::{SearchResult, SearchType};
-use rspotify::prelude::*;
-use rspotify::ClientCredsSpotify;
-
 use yew::platform::spawn_local;
 use yew::prelude::*;
 use yew_hooks::prelude::*;
 
-use crate::song::card::{SongCard, SongCardProps};
-use crate::song::SongPreview;
-use crate::spotify::SpotifyClient;
+use crate::backend::BackendClient;
+use crate::search::results::SearchResults;
+use crate::search::search_bar::SearchBar;
+use crate::song::card::SongCard;
 
 mod results;
 mod search_bar;
-
-async fn get_song_items(
-    query: &str,
-    spotify: &ClientCredsSpotify,
-    search_length: u32,
-) -> IArray<SongCardProps> {
-    let search_result = spotify
-        .search(
-            query,
-            SearchType::Track,
-            None,
-            None,
-            Some(search_length),
-            None,
-        )
-        .await;
-
-    let full_tracks = if let Ok(result) = search_result {
-        match result {
-            SearchResult::Tracks(page) => page.items,
-            _ => panic!("Expected SearchResult::Tracks"),
-        }
-    } else {
-        vec![]
-    };
-
-    full_tracks
-        .into_iter()
-        .filter_map(|track| track.try_into().ok())
-        .map(|song_preview: SongPreview| SongCardProps { song_preview })
-        .collect()
-}
 
 #[derive(PartialEq, Properties)]
 pub struct SongSearchProps {
@@ -56,22 +18,26 @@ pub struct SongSearchProps {
 
 #[function_component]
 pub fn SongSearch(props: &SongSearchProps) -> Html {
-    let spotify = use_context::<SpotifyClient>()
-        .expect("No spotify client provided")
-        .client_creds;
+    let backend = use_context::<BackendClient>().expect("No backend client provided");
 
     #[allow(clippy::redundant_closure)]
     let results = use_state(|| IArray::EMPTY);
 
     let update_results = {
         let results = results.clone();
-        let spotify = spotify.clone();
+        let backend = backend.clone();
         let search_length = props.search_length;
         Callback::from(move |query: String| {
             let results = results.clone();
-            let spotify = spotify.clone();
+            let backend = backend.clone();
             spawn_local(async move {
-                let songs = get_song_items(&query, &spotify, search_length).await;
+                let songs = backend
+                    .get_json(
+                        "/spotify/search",
+                        &[("query", query), ("length", search_length.to_string())],
+                    )
+                    .await
+                    .expect("Failed to get search results");
 
                 results.set(songs);
             });

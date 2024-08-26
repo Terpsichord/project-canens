@@ -5,6 +5,7 @@ use yew::prelude::*;
 fn filter_string(string: &str) -> String {
     deunicode(string)
         .to_lowercase()
+        .replace('&', "and")
         .replace(' ', "-")
         .chars()
         .filter(|c| c.is_ascii_alphanumeric() || *c == '-')
