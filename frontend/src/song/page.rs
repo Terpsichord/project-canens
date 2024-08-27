@@ -1,6 +1,6 @@
 use std::rc::Rc;
 
-use crate::backend::BackendClient;
+use crate::backend;
 use project_canens_common::Song;
 use yew::prelude::*;
 use yew_hooks::{use_async_with_options, UseAsyncHandle, UseAsyncOptions};
@@ -17,13 +17,10 @@ pub struct SongPageProps {
 
 #[function_component]
 pub fn SongPage(props: &SongPageProps) -> Html {
-    let backend = use_context::<BackendClient>().expect("No backend client provided");
-
     let id = props.id.clone();
     let song_handle: UseAsyncHandle<Song, _> = use_async_with_options(
         async move {
-            backend
-                .get_json("/spotify/song", &[("id", id)])
+            backend::get("/spotify/song", &[("id", id)])
                 .await
                 .map_err(Rc::new)
         },

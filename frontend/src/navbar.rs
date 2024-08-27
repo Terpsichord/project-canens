@@ -6,7 +6,7 @@ use yew_router::hooks::use_navigator;
 pub struct NavbarProps {}
 
 #[function_component]
-pub fn Navbar(props: &NavbarProps) -> Html {
+pub fn Navbar(_props: &NavbarProps) -> Html {
     let navigator = use_navigator().unwrap();
     let onclick = Callback::from(move |_| {
         navigator.push(&Route::Home);

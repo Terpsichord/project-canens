@@ -1,5 +1,4 @@
 frontend/dist/
-frontend/target/
+target/
 .env
-backend/node_modules/
-.vercel
+Secrets.toml

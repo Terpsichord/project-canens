@@ -1,4 +1,3 @@
-use crate::backend::BackendClient;
 use yew::prelude::*;
 use yew_router::{BrowserRouter, Routable, Switch};
 
@@ -24,14 +23,11 @@ fn switch(route: Route) -> Html {
 
 #[function_component(App)]
 pub fn app() -> Html {
-    let backend = BackendClient::new();
     html! {
         <BrowserRouter>
             <Navbar />
             <main>
-                <ContextProvider<BackendClient> context={backend}>
-                    <Switch<Route> render={switch} />
-                </ContextProvider<BackendClient>>
+                <Switch<Route> render={switch} />
             </main>
         </BrowserRouter>
     }

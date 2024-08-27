@@ -11,8 +11,6 @@ mod hooktheory;
 mod navbar;
 mod search;
 mod song;
-#[cfg(debug_secrets)]
-mod spotify;
 mod tabs;
 
 use app::App;
