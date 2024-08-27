@@ -2,7 +2,6 @@ mod error;
 mod spotify;
 
 use anyhow::Context;
-use axum::http::HeaderValue;
 use axum::routing::get;
 use axum::Router;
 use rspotify::{ClientCredsSpotify, Credentials};
@@ -31,8 +30,11 @@ async fn main(#[shuttle_runtime::Secrets] secrets: SecretStore) -> ShuttleAxum {
         .with_state(spotify_client_creds)
         .layer(
             CorsLayer::new()
-                // TODO: Change to url of deployed frontend
-                .allow_origin(HeaderValue::from_str("https://localhost:8080").unwrap())
+                // TODO: Remove localhost
+                .allow_origin([
+                    "http://localhost:8080".parse().unwrap(),
+                    "https://terpsichord.github.io/".parse().unwrap(),
+                ])
                 .allow_headers(Any),
         );
 
