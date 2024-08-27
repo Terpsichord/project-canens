@@ -1,0 +1,22 @@
+name: CD (Shuttle)
+
+on: [ push ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Restore cache
+        uses: Swatinem/rust-cache@v2  
+
+      - name: Deploy to Shuttle
+        uses: shuttle-hq/deploy-action@main
+        with:
+          working-directory: backend
+          deploy-key: ${{ secrets.SHUTTLE_API_KEY }} 
+      
