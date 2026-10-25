@@ -16,6 +16,9 @@ mod tabs;
 use app::App;
 use wasm_logger::Config;
 
+#[cfg(test)]
+pub use backend::tests;
+
 fn main() {
     wasm_logger::init(Config::default());
     yew::Renderer::<App>::new().render();
