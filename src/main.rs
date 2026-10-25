@@ -1,7 +1,10 @@
 mod app;
+mod search;
+mod spotify;
 
 use app::App;
 
 fn main() {
-    yew::Renderer::<App>::new().render();
+    let spotify_client_creds = spotify::authorize_spotify();
+    yew::Renderer::<App>::with_props(AppProps { spotify_client_creds }).render();
 }
